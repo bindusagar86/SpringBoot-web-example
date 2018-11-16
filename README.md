@@ -1,2 +1,2 @@
 # SpringBoot-web-example
-A simple web mvc example using spring boot, spring mvc, spring security, h2-db.
+A simple web mvc example using spring boot, spring mvc, spring security, h2-db and thymeleaf as UI.
