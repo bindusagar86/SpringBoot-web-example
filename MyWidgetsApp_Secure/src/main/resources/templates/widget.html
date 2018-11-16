@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Widget</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<!-- Brand/logo -->
+  		<a class="navbar-nav" data-toogle="tooltip" title="Home" href="#" th:href="${'user'}">
+  			<img src="https://png.icons8.com/ios/50/2ecc71/home-filled.png" alt="Home">
+  		</a>
+  		<h2 class="text-success ml-2">Widget Details</h2>
+  		<!-- Links -->
+  		<ul class="navbar-nav ml-auto">
+  			<li>
+  				<a href="#" class="btn btn-outline-success mr-3" th:href="${'user/edit/'+widget.id}">Edit</a>
+  			</li>
+    		<li class="nav-item ">
+      			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
+    		</li>
+  		</ul>
+	</nav>
+	<div class="container mt-3">
+			<form class="form-horizontal col-md-8">
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="id">ID:</label> <span
+						class="form-control-static" th:text="${widget.id}">Widget
+						Id</span>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label " for="name">Name:</label> <span
+						class="form-control-static" th:text="${widget.name}">Widget
+						Name</span>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label " for="description">Description:</label>
+					<span class="form-control-static" th:text="${widget.description}">Widget
+						Description</span>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label " for="createdDate">Created Date:</label>
+					<span class="form-control-static" th:text="${#temporals.format(widget.createdDate, 'dd-MMM-yyyy HH:mm:ss')}">
+					Widget Created Date</span>
+				</div>
+				<hr>
+			</form>
+	</div>
+
+</body>
+<footer class="text-center mt-5">&copy; Copyright 2018 BBtech.com</footer>
+
+</html>

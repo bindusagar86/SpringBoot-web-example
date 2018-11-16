@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Widgets</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" 
+	integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  		<h2 class="text-success">Widgets</h2>
+  		<!-- Links -->
+  		<ul class="navbar-nav ml-auto">
+  			<li class="nav-item mr-2">
+				<a class="btn btn-outline-info" href="#" th:href="${'users'}">View Users</a>
+		 	</li>
+		 	<li class="nav-item mr-2">
+				<a class="btn btn-outline-info" href="#" th:href="${'widget/new'}">Create New Widget</a>
+		 	</li>
+    		<li class="nav-item ">
+      			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
+    		</li>
+  		</ul>
+	</nav>
+	<div class="container mt-3">
+		<div class="col-md-10">
+		
+		<table class="table table-striped table-hover">
+			<thead class="thead-dark">
+			<tr>
+				<th class="text-center d-none d-xs-none">ID</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Created Date</th>
+				<th>View</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+			</thead>
+			<tr th:each="widget : ${widgets}">
+				<td class=" d-none d-xs-none" th:text="${widget.id}">Widget Id</td>
+				<td th:text="${widget.name}">Widget Name</td>
+				<td th:text="${widget.description}">Widget Description</td>
+				<td th:text="${#temporals.format(widget.createdDate, 'dd-MMM-yyyy HH:mm:ss')}">Widget Created Date</td>
+				<td><a class="btn btn-info fas fa-eye" href="#" th:href="${'widget/'+widget.id}"></a></td>
+				<td><a class="btn btn-success fas fa-edit" href="#" th:href="${'widget/edit/'+widget.id}"></a></td>
+				<td><a class="btn btn-danger fas fa-trash-alt" href="#" th:href="${'widget/delete/'+widget.id}"></a></td>
+			</tr>
+		
+		</table>
+		</div>
+	</div>
+</body>
+<footer class="text-center mt-5">&copy; Copyright 2018 BBtech.com</footer>
+
+</html>

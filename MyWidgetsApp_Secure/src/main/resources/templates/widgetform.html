@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Create/Edit Widget</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" 
+	integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <!-- Brand/logo -->
+  		<a class="navbar-nav" data-toogle="tooltip" title="Home" href="#" th:href="${'/widgets'}">
+  			<img src="https://png.icons8.com/ios/50/2ecc71/home-filled.png" alt="Home">
+  		</a>
+  		
+  		<!-- Links -->
+  		<ul class="navbar-nav ml-auto">
+    		<li class="nav-item ">
+      			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
+    		</li>
+  		</ul>
+	</nav>
+	
+	<div class="container col-md-6 mt-2">
+		<h2 class="text-primary">Create/Edit widget</h2>
+		<form style="width:20rem" th:object="${widget}" th:action="@{/widget}" method="post">
+			<input type="hidden" th:field="*{id}"/>
+			<div class="form-group">
+			 	<label for="name">Name</label>
+			 	<input type="text" th:field="*{name}" class="form-control" placeholder="Name" required autofocus>
+			</div>
+			<div class="form-group">
+			 	<label for="description">Description</label>
+			 	<input type="text" th:field="*{description}" class="form-control" placeholder="Description" required >
+			</div>
+			<button type="submit" class="btn btn-success">Submit</button>
+		</form>
+	</div>
+</body>
+<footer class="text-center mt-5">&copy; Copyright 2018 BBtech.com</footer>
+
+</html>
