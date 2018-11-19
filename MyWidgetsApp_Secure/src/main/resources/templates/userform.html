@@ -24,7 +24,7 @@
 	<div class="container mt-3 col-md-4">
 		<h2 th:if="!${edit}">Register</h2>
 		<h2 th:if="${edit}">Edit User</h2>
-		<form class="form-horizontal" th:object="${user}" th:action="@{/register}" method="post">
+		<form class="form-horizontal" th:object="${user}"  method="post">
 			<div class="form-group">
 				<input type="hidden" th:field="*{id}"/>
 			 	<label for="firstName">First Name</label>
@@ -47,7 +47,8 @@
 			 	<input type="password" th:field="*{password}" th:value="${user.password}" class="form-control" placeholder="Password" required >
 			</div>
 			<input th:if="${edit}" type="hidden" th:field="*{password}"/>
-			<button type="submit" class="btn btn-success">Register</button>
+			<button th:with="text=${edit} ? 'Edit' : 'Register'"
+				type="submit" class="btn btn-success" th:text="${text}">Register</button>
 		</form>
 	</div>
 </body>

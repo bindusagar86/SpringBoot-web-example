@@ -49,9 +49,9 @@
 				<td th:text="${user.lastName}">Last Name</td>
 				<td th:text="${#temporals.format(user.dob, 'dd-MMM-yyyy')}">DOB</td>
 				<td th:text="${user.email}">Email</td>
-				<td><a class="btn btn-info fas fa-eye" href="#" th:href="${'user/'+user.id}"></a></td>
-				<td><a class="btn btn-success fas fa-edit" href="#" th:href="${'user/edit/'+user.id}"></a></td>
-				<td><a class="btn btn-danger fas fa-trash-alt" href="#" th:href="${'user/delete/'+user.id}"></a></td>
+				<td><a class="btn btn-info fas fa-eye" href="#" th:href="${'users/'+user.id}"></a></td>
+				<td><a class="btn btn-success fas fa-edit" href="#" th:href="${'users/'+user.id+'/edit'}"></a></td>
+				<td><a class="btn btn-danger fas fa-trash-alt" href="#" th:href="${'users/'+user.id+'/delete'}"></a></td>
 			</tr>
 		
 		</table>

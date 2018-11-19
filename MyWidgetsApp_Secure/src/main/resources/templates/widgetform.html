@@ -27,8 +27,8 @@
 	
 	<div class="container col-md-6 mt-2">
 		<h2 class="text-primary">Create/Edit widget</h2>
-		<form style="width:20rem" th:object="${widget}" th:action="@{/widget}" method="post">
-			<input type="hidden" th:field="*{id}"/>
+		<form style="width:20rem" th:object="${widget}" method="post">
+			<input type="hidden" th:value="*{id}"/>
 			<div class="form-group">
 			 	<label for="name">Name</label>
 			 	<input type="text" th:field="*{name}" class="form-control" placeholder="Name" required autofocus>
