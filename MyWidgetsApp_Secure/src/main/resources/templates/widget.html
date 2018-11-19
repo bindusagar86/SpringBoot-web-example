@@ -23,7 +23,7 @@
   		<!-- Links -->
   		<ul class="navbar-nav ml-auto">
   			<li>
-  				<a href="#" class="btn btn-outline-success mr-3" th:href="${'user/edit/'+widget.id}">Edit</a>
+  				<a href="#" class="btn btn-outline-success mr-3" th:href="${'users/'+user.id+'/widgets/+widget.id+'/edit'}">Edit</a>
   			</li>
     		<li class="nav-item ">
       			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>

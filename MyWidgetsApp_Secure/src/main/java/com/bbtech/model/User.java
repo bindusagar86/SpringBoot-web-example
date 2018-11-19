@@ -1,6 +1,11 @@
 package com.bbtech.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,19 +23,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name="users")
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class User{
 	
 	@Id
@@ -55,14 +53,81 @@ public class User{
 	@NotEmpty @NotNull
 	private String password;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(
-			name="users_widgets",
-			joinColumns=@JoinColumn(
-					name="user_id", referencedColumnName="id"),
-			inverseJoinColumns=@JoinColumn(
-					name="widget_id", referencedColumnName="id")
-	)
-	private Set<Widget> widgets;
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	private Set<Widget> widgets=new LinkedHashSet<>();
+	
+	protected void setInternalWidgets(Set<Widget> widgets) {
+		this.widgets=widgets;
+	}
+	
+	protected Set<Widget> getInternalWidgets(){
+		if(this.widgets == null)
+			this.widgets=new HashSet<>();
+		return this.widgets;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public LocalDate getDob() {
+		return dob;
+	}
+
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public void setWidgets(Set<Widget> widgets) {
+		this.widgets=widgets;
+	}
+	public List<Widget> getWidgets() {
+		List<Widget> sortedWidget=new ArrayList<Widget>(getInternalWidgets());
+		PropertyComparator.sort(sortedWidget, new MutableSortDefinition("createdDate", false, false));
+		return Collections.unmodifiableList(sortedWidget);
+	}
+	
+	public void addWidget(Widget widget) {
+		getInternalWidgets().add(widget);
+		widget.setUser(this);
+		
+	}
+	
 	
 }

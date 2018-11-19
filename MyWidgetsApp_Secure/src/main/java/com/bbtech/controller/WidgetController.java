@@ -1,34 +1,64 @@
 package com.bbtech.controller;
 
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bbtech.model.User;
 import com.bbtech.model.Widget;
+import com.bbtech.repository.UserRepository;
 import com.bbtech.repository.WidgetRepository;
 
 @Controller
-@RequestMapping("user/{userId}")
+@RequestMapping("users/{userId}")
 public class WidgetController {
 
-	private final WidgetRepository widgetRepo;
 	
-	
-	public WidgetController(WidgetRepository widgetRepo) {
-		this.widgetRepo = widgetRepo;
-	}
+	private static final Logger log = LoggerFactory.getLogger(WidgetController.class);
 
+	private final WidgetRepository widgetRepo;
+	private final UserRepository userRepo;
+	
+	
+	public WidgetController(final WidgetRepository widgetRepo,final UserRepository userRepo) {
+		this.widgetRepo = widgetRepo;
+		this.userRepo=userRepo;
+	}
+	
+	@ModelAttribute("user")
+	public User findUser(@PathVariable Long userId) {
+		return userRepo.findById(userId).orElse(new User());
+	}
+	
+//	@InitBinder("user")
+//	public void setAllowedFields(WebDataBinder binder) {
+//		binder.setDisallowedFields("id");
+//	}
+	
+//	@InitBinder("widget")
+//	public void setWidgetAllowedFields(WebDataBinder binder) {
+//		binder.setDisallowedFields("id");
+//	}
+	
 	/**
 	 * Load the new widget page
 	 * @param model
 	 * @return
 	 * */
-	@GetMapping("widget/new")
-	public String newWidget(Model model) {
-		model.addAttribute("widget", new Widget());
+	@GetMapping("/widgets/new")
+	public String newWidget(User user,ModelMap model) {
+		Widget widget = new Widget();
+		user.addWidget(widget);
+		model.put("widget", widget);
 		return "widgetform";
 	}
 	
@@ -38,48 +68,24 @@ public class WidgetController {
 	 * @param widget
 	 * @return
 	 * */
-	@PostMapping("/widget")
-	public String createWidget(@PathVariable Long userId,Widget widget,Model model) {
-		widget=widgetRepo.save(widget);
-		System.out.println("==========after calling createWidget=========="+widget.getName()+" id: "+widget.getId());
-		return "redirect:/widget/"+widget.getId();
+	@PostMapping("/widgets/new")
+	public String createWidget(@Valid Widget widget,User user, ModelMap model, BindingResult result) {
+		user.addWidget(widget);
+		if(result.hasErrors()) {
+			model.put("widget", widget);
+			return "widgetform";
+		}else {
+			widgetRepo.save(widget);
+			return "redirect:/users/{userId}";
+		}
 	}
 	
-	/**
-	 * Create a widget by id
-	 * @param id
-	 * @param model
-	 * @return
-	 * */
-	@GetMapping("widget/{id}")
-	public String getWidgetById(@PathVariable Long id,Model model) {
-		System.out.println("==========calling getWidgetById=========="+widgetRepo.findById(id).get().getName());
-		model.addAttribute("widget", widgetRepo.findById(id).orElse(new Widget()));
-		return "widget";
-	}
 	
-	/**
-	 * Get all widgets
-	 * @param model
-	 * @return
-	 * */
-	@GetMapping("/widgets")
-	public String getWidgets(Model model) {
-		System.out.println("==========calling getWidgets==========");
-		model.addAttribute("widgets", widgetRepo.findAll());
-		return "widgets";
-	}
-	
-	/**
-	 * Load the edit widget page for the specific id
-	 * @param id
-	 * @param model
-	 * @return
-	 * */
-	@GetMapping("/widget/edit/{id}")
-	public String editWidget(@PathVariable Long id, Model model) {
-		System.out.println("==========calling editWidget=========="+widgetRepo.findById(id).get().getName());
-		model.addAttribute("widget",widgetRepo.findById(id).orElse(new Widget()));
+	@GetMapping("/widgets/{id}/edit")
+	public String editWidget(@PathVariable Long id, ModelMap model) {
+		Widget widget=this.widgetRepo.findById(id).orElse(new Widget());
+		log.info("widget id: "+widget.getId());
+		model.put("widget",widget);
 		return "widgetform";
 	}
 	
@@ -88,13 +94,19 @@ public class WidgetController {
 	 * @param widget
 	 * @return
 	 * */
-	@PostMapping("/widget/{id}")
-	public String updateWidget(Widget widget) {
-//		System.out.println("==========calling updateWidget=========="+widget.getName());
-//		Long count= widgetRepo.count();
-//		widget.setId(count+1);
-		widget=widgetRepo.save(widget);
-		return "redirect:/widget/"+widget.getId();
+	@PostMapping("/widgets/{id}/edit")
+	public String updateWidget(@Valid Widget widget,User user,BindingResult result,ModelMap model) {
+		if(result.hasErrors()) {
+			widget.setUser(user);
+			model.put("widget", widget);
+			return "widgetform";
+		}else {
+			log.info("widget: "+widget);
+//			widget.setId(id);
+			user.addWidget(widget);
+			this.widgetRepo.save(widget);
+			return "redirect:/users/{userId}";
+		}
 	}
 	
 	/**
@@ -102,7 +114,7 @@ public class WidgetController {
 	 * @param id
 	 * @return
 	 * */
-	@GetMapping("/widget/delete/{id}")
+	@GetMapping("/widget/{id}/delete")
 	public String deleteWidget(@PathVariable Long id) {
 		System.out.println("==========calling deleteWidget=========="+id);
 		widgetRepo.deleteById(id);

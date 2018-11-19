@@ -6,20 +6,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 @Entity
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Widget {
 
 	@Id
@@ -34,5 +27,55 @@ public class Widget {
 	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
 	private LocalDateTime createdDate=LocalDateTime.now();
 	
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "Widget [id=" + id + ", name=" + name + ", description=" + description + ", createdDate=" + createdDate
+				+ ", user=" + user + "]";
+	}
+
+	
 }
