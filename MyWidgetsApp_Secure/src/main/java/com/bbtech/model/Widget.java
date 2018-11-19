@@ -3,6 +3,7 @@ package com.bbtech.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -27,8 +30,9 @@ public class Widget {
 	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
 	private LocalDateTime createdDate=LocalDateTime.now();
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="user_id")
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;
 
 	public Long getId() {

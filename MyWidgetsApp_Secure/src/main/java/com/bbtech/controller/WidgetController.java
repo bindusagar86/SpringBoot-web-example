@@ -114,11 +114,11 @@ public class WidgetController {
 	 * @param id
 	 * @return
 	 * */
-	@GetMapping("/widget/{id}/delete")
+	@GetMapping("/widgets/{id}/delete")
 	public String deleteWidget(@PathVariable Long id) {
 		System.out.println("==========calling deleteWidget=========="+id);
 		widgetRepo.deleteById(id);
-		return "redirect:/widgets";
+		return "redirect:/users/{userId}";
 	}
 	
 	

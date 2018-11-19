@@ -23,6 +23,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -53,7 +55,8 @@ public class User{
 	@NotEmpty @NotNull
 	private String password;
 	
-	@OneToMany(cascade=CascadeType.ALL, mappedBy="user")
+	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Widget> widgets=new LinkedHashSet<>();
 	
 	protected void setInternalWidgets(Set<Widget> widgets) {
