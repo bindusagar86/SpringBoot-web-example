@@ -8,15 +8,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -55,7 +52,7 @@ public class User{
 	@NotEmpty @NotNull
 	private String password;
 	
-	@OneToMany(mappedBy="user",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user",fetch=FetchType.EAGER,orphanRemoval=true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Set<Widget> widgets=new LinkedHashSet<>();
 	
@@ -130,6 +127,11 @@ public class User{
 		getInternalWidgets().add(widget);
 		widget.setUser(this);
 		
+	}
+	
+	public void removeWidget(Widget widget) {
+		getInternalWidgets().remove(widget);
+		widget.setUser(null);
 	}
 	
 	
