@@ -20,6 +20,11 @@
   		</a>
   		</span>
   		<h2 class="text-info text-center">Welcome to BBTech.com</h2>
+  		<ul class="navbar-nav ml-auto">
+    		<li class="nav-item " th:if="${edit}">
+      			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
+    		</li>
+  		</ul>
 	</nav>
 	<div class="container mt-3 col-md-4">
 		<h2 th:if="!${edit}">Register</h2>
