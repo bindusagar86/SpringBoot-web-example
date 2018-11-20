@@ -36,20 +36,22 @@ public class WidgetController {
 		this.userRepo=userRepo;
 	}
 	
+	/**
+	 * This method is added to find the user based on the userId and it'll map with the widget.
+	 **/
 	@ModelAttribute("user")
 	public User findUser(@PathVariable Long userId) {
 		return userRepo.findById(userId).orElse(new User());
 	}
 	
+	/**
+	 * This method is added to find the exclude the id field of the User while save/update the widget.
+	 **/
 	@InitBinder("user")
 	public void setAllowedFields(WebDataBinder binder) {
 		binder.setDisallowedFields("id");
 	}
 	
-//	@InitBinder("widget")
-//	public void setWidgetAllowedFields(WebDataBinder binder) {
-//		binder.setDisallowedFields("id");
-//	}
 	
 	/**
 	 * Load the new widget page
@@ -80,6 +82,12 @@ public class WidgetController {
 			widgetRepo.save(widget);
 			return "redirect:/users/{userId}";
 		}
+	}
+	
+	@GetMapping("/widgets/{id}")
+	public String getWidget(@PathVariable Long id,ModelMap model) {
+		model.put("widget", widgetRepo.findById(id).orElse(new Widget()));
+		return "widget";
 	}
 	
 	

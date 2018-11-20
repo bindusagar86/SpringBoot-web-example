@@ -30,7 +30,7 @@ public class Widget {
 	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm:ss")
 	private LocalDateTime createdDate=LocalDateTime.now();
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	@OnDelete(action=OnDeleteAction.CASCADE)
 	private User user;

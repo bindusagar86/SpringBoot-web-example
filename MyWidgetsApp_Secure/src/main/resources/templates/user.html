@@ -18,6 +18,9 @@
   		</a>
   		<!-- Links -->
   		<ul class="navbar-nav ml-auto">
+  			<li class="nav-item ">
+      			<h2 class="text-info mr-3" th:text="${user.firstName}+' '+${user.lastName}"></h2>
+    		</li>
     		<li class="nav-item ">
       			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
     		</li>
@@ -26,7 +29,7 @@
 	<div class="container mt-3">
 		<form class="form-horizontal col-md-8">
 			<div class="form-group">
-				<h2 class="text-success ml-2">User Details</h2>
+				<h2 class="text-success">User Details</h2>
 				<a href="#" class="btn btn-outline-success col-md-2 float-right" th:href="${'/users/'+user.id+'/edit'}">Edit</a>
 			</div>
 			<div class="form-group">
@@ -55,11 +58,11 @@
 				</div>
 				 -->
 		</form>
-		
-		<h2 class="text-success col-md-4 ml-2">Widget Details</h2>
-		<a href="#" class="btn btn-outline-success float-right mb-3" 
-				th:href="${'/users/'+user.id+'/widgets/new'}">Add New Widget</a>
-				
+		<div>
+			<h2 class="text-success">Widget Details</h2>
+			<a href="#" class="btn btn-outline-success float-right mb-3" 
+						th:href="${'/users/'+user.id+'/widgets/new'}">Add New Widget</a>
+		</div>	
 		<table class="table table-striped table-hover">
 			<thead class="thead-dark">
 				<tr>
