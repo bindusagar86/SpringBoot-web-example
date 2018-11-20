@@ -1,5 +1,7 @@
 package com.bbtech.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.bbtech.model.User;
+import com.bbtech.model.Widget;
 import com.bbtech.repository.UserRepository;
+import com.bbtech.repository.WidgetRepository;
 
 @Controller
 public class UserController {
@@ -22,9 +26,11 @@ public class UserController {
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
 	private final UserRepository userRepo;
+	private final WidgetRepository widgetRepo;
 	
-	public UserController(final UserRepository userRepo) {
+	public UserController(final UserRepository userRepo,final WidgetRepository widgetRepo) {
 		this.userRepo=userRepo;
+		this.widgetRepo=widgetRepo;
 	}
 	
 	@InitBinder("user")
@@ -42,16 +48,17 @@ public class UserController {
 	@PostMapping("/login")
 	public String processLogin(User user,ModelMap model) {
 		User existedUser=userRepo.findByEmail(user.getEmail());
-		String userName=existedUser.getEmail();
-		String password=existedUser.getPassword();
-		log.info("username: "+userName+" password: "+password);
-		model.put("edit", null);
-		if(password.equals(user.getPassword())) {
-			return "redirect:/users/"+existedUser.getId();
-		}else {
-			model.put("errorMessage", "Username or pasword incorrect!");
-			return "login";
+		if(existedUser !=null) {
+			String userName=existedUser.getEmail();
+			String password=existedUser.getPassword();
+			log.info("username: "+userName+" password: "+password);
+			model.put("edit", null);
+			if(password.equals(user.getPassword())) {
+				return "redirect:/users/"+existedUser.getId();
+			}
 		}
+		model.put("errorMessage", "Username or pasword incorrect!");
+		return "login";
 	}
 	
 	@GetMapping("/users")
@@ -110,7 +117,14 @@ public class UserController {
 	
 	@GetMapping("users/{id}/delete")
 	public String deleteUser(@PathVariable Long id) {
-		userRepo.deleteById(id);
+		User user=userRepo.findById(id).orElse(new User());
+		List<Widget> widgets=widgetRepo.findWidgetByUserId(id);
+		widgets.forEach(widget->{
+			log.info("Removing widget: "+widget);
+			user.removeWidget(widget);
+			
+		});
+		userRepo.delete(user);
 		return "redirect:/users";
 	}
 	
