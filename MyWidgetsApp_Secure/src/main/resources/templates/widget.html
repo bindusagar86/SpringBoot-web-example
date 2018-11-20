@@ -16,36 +16,34 @@
 
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   		<!-- Brand/logo -->
-  		<a class="navbar-nav" data-toogle="tooltip" title="Home" href="#" th:href="${'user'}">
+  		<a class="navbar-nav" data-toogle="tooltip" title="Home" href="#" th:href="${'/users/'+user.id}">
   			<img src="https://png.icons8.com/ios/50/2ecc71/home-filled.png" alt="Home">
   		</a>
   		<h2 class="text-success ml-2">Widget Details</h2>
   		<!-- Links -->
   		<ul class="navbar-nav ml-auto">
-  			<li>
-  				<a href="#" class="btn btn-outline-success mr-3" th:href="${'users/'+user.id+'/widgets/+widget.id+'/edit'}">Edit</a>
-  			</li>
+  			<li class="nav-item ">
+      			<h2 class="text-info mr-3" th:text="${user.firstName}+' '+${user.lastName}"></h2>
+    		</li>
     		<li class="nav-item ">
       			<a class="btn btn-outline-danger" data-toggle="tooltip" title="Logout" href="#" th:href="${'/login?logout'}">Logout</a>
     		</li>
   		</ul>
 	</nav>
 	<div class="container mt-3">
-			<form class="form-horizontal col-md-8">
+			<form class="form-horizontal col-md-6">
+				<a href="#" class="btn btn-outline-success col-md-2 float-right" th:href="${widget.id+'/edit'}">Edit</a>
 				<div class="form-group">
-					<label class="col-md-3 control-label" for="id">ID:</label> <span
-						class="form-control-static" th:text="${widget.id}">Widget
-						Id</span>
+					<label class="col-md-3 control-label" for="id">ID:</label> 
+					<span class="form-control-static" th:text="${widget.id}">Widget Id</span>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label " for="name">Name:</label> <span
-						class="form-control-static" th:text="${widget.name}">Widget
-						Name</span>
+					<label class="col-md-3 control-label " for="name">Name:</label> 
+					<span class="form-control-static" th:text="${widget.name}">Widget Name</span>
 				</div>
 				<div class="form-group">
 					<label class="col-md-3 control-label " for="description">Description:</label>
-					<span class="form-control-static" th:text="${widget.description}">Widget
-						Description</span>
+					<span class="form-control-static" th:text="${widget.description}">Widget Description</span>
 				</div>
 				<div class="form-group">
 					<label class="col-md-3 control-label " for="createdDate">Created Date:</label>
