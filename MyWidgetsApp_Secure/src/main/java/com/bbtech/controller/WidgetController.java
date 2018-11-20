@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,10 +41,10 @@ public class WidgetController {
 		return userRepo.findById(userId).orElse(new User());
 	}
 	
-//	@InitBinder("user")
-//	public void setAllowedFields(WebDataBinder binder) {
-//		binder.setDisallowedFields("id");
-//	}
+	@InitBinder("user")
+	public void setAllowedFields(WebDataBinder binder) {
+		binder.setDisallowedFields("id");
+	}
 	
 //	@InitBinder("widget")
 //	public void setWidgetAllowedFields(WebDataBinder binder) {
