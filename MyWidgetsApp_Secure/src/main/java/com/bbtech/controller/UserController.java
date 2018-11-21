@@ -17,20 +17,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.bbtech.model.User;
 import com.bbtech.model.Widget;
-import com.bbtech.repository.UserRepository;
-import com.bbtech.repository.WidgetRepository;
+import com.bbtech.service.UserService;
 
 @Controller
 public class UserController {
  
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-	private final UserRepository userRepo;
-	private final WidgetRepository widgetRepo;
+	private final UserService userService;
 	
-	public UserController(final UserRepository userRepo,final WidgetRepository widgetRepo) {
-		this.userRepo=userRepo;
-		this.widgetRepo=widgetRepo;
+	public UserController(final UserService userService) {
+		this.userService=userService;
 	}
 	
 	@InitBinder("user")
@@ -47,7 +44,7 @@ public class UserController {
 	
 	@PostMapping("/login")
 	public String processLogin(User user,ModelMap model) {
-		User existedUser=userRepo.findByEmail(user.getEmail());
+		User existedUser=userService.findByEmail(user.getEmail());
 		if(existedUser !=null) {
 			String userName=existedUser.getEmail();
 			String password=existedUser.getPassword();
@@ -63,7 +60,7 @@ public class UserController {
 	
 	@GetMapping("/users")
 	public String getAllUsers(ModelMap model) {
-		model.put("users", userRepo.findAll());
+		model.put("users", userService.getAllUsers());
 		return "users";
 	}
 	
@@ -81,21 +78,21 @@ public class UserController {
 			model.put("user", user);
 			return "userform";
 		}else {
-			user=userRepo.save(user);
+			user=userService.createOrUpdateUser(user);
 			return "redirect:/users/"+user.getId();
 		}
 	}
 	
 	@GetMapping("users/{id}")
 	public String getUser(@PathVariable Long id, ModelMap model) {
-		User existUser=userRepo.findById(id).orElse(new User());
+		User existUser=userService.findById(id);
 		model.put("user", existUser);
 		return "user";
 	}
 	
 	@GetMapping("users/{id}/edit")
 	public String editUser(@PathVariable Long id, ModelMap model) {
-		User existUser=this.userRepo.findById(id).orElse(new User());
+		User existUser=this.userService.findById(id);
 		log.info("ID: "+existUser.getId());
 		model.put("user", existUser);
 		model.put("edit", "edit");
@@ -110,21 +107,21 @@ public class UserController {
 			return "userform";
 		}else {
 			user.setId(id);
-			userRepo.save(user);
+			userService.createOrUpdateUser(user);
 			return "redirect:/users/" + user.getId();
 		}
 	}
 	
 	@GetMapping("users/{id}/delete")
 	public String deleteUser(@PathVariable Long id) {
-		User user=userRepo.findById(id).orElse(new User());
-		List<Widget> widgets=widgetRepo.findWidgetByUserId(id);
+		User user=userService.findById(id);
+		List<Widget> widgets=userService.findWidgetByUserId(id);
 		widgets.forEach(widget->{
 			log.info("Removing widget: "+widget);
 			user.removeWidget(widget);
 			
 		});
-		userRepo.delete(user);
+		userService.deleteUser(user);
 		return "redirect:/users";
 	}
 	
