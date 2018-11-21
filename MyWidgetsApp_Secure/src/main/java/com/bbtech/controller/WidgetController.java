@@ -43,7 +43,7 @@ public class WidgetController {
 	}
 	
 	/**
-	 * This method is added to find the exclude the id field of the User while save/update the widget.
+	 * This method is added to exclude the id field of the User while save/update the widget.
 	 **/
 	@InitBinder("user")
 	public void setAllowedFields(WebDataBinder binder) {
