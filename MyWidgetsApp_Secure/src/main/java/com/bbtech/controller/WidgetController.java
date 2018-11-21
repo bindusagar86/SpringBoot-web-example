@@ -19,6 +19,7 @@ import com.bbtech.model.User;
 import com.bbtech.model.Widget;
 import com.bbtech.repository.UserRepository;
 import com.bbtech.repository.WidgetRepository;
+import com.bbtech.service.WidgetService;
 
 @Controller
 @RequestMapping("users/{userId}")
@@ -27,13 +28,10 @@ public class WidgetController {
 	
 	private static final Logger log = LoggerFactory.getLogger(WidgetController.class);
 
-	private final WidgetRepository widgetRepo;
-	private final UserRepository userRepo;
+	private final WidgetService widgetService;
 	
-	
-	public WidgetController(final WidgetRepository widgetRepo,final UserRepository userRepo) {
-		this.widgetRepo = widgetRepo;
-		this.userRepo=userRepo;
+	public WidgetController(final WidgetService widgetService) {
+		this.widgetService = widgetService;
 	}
 	
 	/**
@@ -41,7 +39,7 @@ public class WidgetController {
 	 **/
 	@ModelAttribute("user")
 	public User findUser(@PathVariable Long userId) {
-		return userRepo.findById(userId).orElse(new User());
+		return widgetService.findUser(userId);
 	}
 	
 	/**
@@ -79,21 +77,21 @@ public class WidgetController {
 			model.put("widget", widget);
 			return "widgetform";
 		}else {
-			widgetRepo.save(widget);
+			widgetService.createOrUpdateWidget(widget);
 			return "redirect:/users/{userId}";
 		}
 	}
 	
 	@GetMapping("/widgets/{id}")
 	public String getWidget(@PathVariable Long id,ModelMap model) {
-		model.put("widget", widgetRepo.findById(id).orElse(new Widget()));
+		model.put("widget", widgetService.findById(id));
 		return "widget";
 	}
 	
 	
 	@GetMapping("/widgets/{id}/edit")
 	public String editWidget(@PathVariable Long id, ModelMap model) {
-		Widget widget=this.widgetRepo.findById(id).orElse(new Widget());
+		Widget widget=this.widgetService.findById(id);
 		log.info("widget id: "+widget.getId());
 		model.put("widget",widget);
 		return "widgetform";
@@ -114,7 +112,7 @@ public class WidgetController {
 			log.info("widget: "+widget);
 //			widget.setId(id);
 			user.addWidget(widget);
-			this.widgetRepo.save(widget);
+			this.widgetService.createOrUpdateWidget(widget);
 			return "redirect:/users/{userId}";
 		}
 	}
@@ -127,7 +125,7 @@ public class WidgetController {
 	@GetMapping("/widgets/{id}/delete")
 	public String deleteWidget(@PathVariable Long id) {
 		System.out.println("==========calling deleteWidget=========="+id);
-		widgetRepo.deleteById(id);
+		widgetService.deleteWidget(id);
 		return "redirect:/users/{userId}";
 	}
 	
